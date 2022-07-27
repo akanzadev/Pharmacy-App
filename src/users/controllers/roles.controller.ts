@@ -14,7 +14,7 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CreateRoleDto, UpdateRoleDto } from '../dtos';
 import { JwtAuthGuard, RolesGuard } from '../../auth/guards';
 import { RoleEnum } from '../../auth/models';
-import { Roles } from '../../auth/decorators';
+import { Public, Roles } from '../../auth/decorators';
 import { RolesService } from '../services';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -37,7 +37,8 @@ export class RolesController {
     return this.rolesService.findOne(id);
   }
 
-  @Roles(RoleEnum.ADMIN)
+  @Public()
+  // @Roles(RoleEnum.ADMIN)
   @ApiOperation({ summary: 'Create a role, required admin role' })
   @Post()
   create(@Body() payload: CreateRoleDto) {

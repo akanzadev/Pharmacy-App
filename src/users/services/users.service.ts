@@ -57,6 +57,7 @@ export class UsersService {
       this.customerRepo.create({
         name: data.name,
         lastname: data.lastname,
+        phone: data.phone,
       }),
     );
     newUser.role = await this.roleRepo.findOne({

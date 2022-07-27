@@ -16,8 +16,10 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string) {
-    console.log(email, password);
-    const user = await this.userRepo.findOne({ where: { email } });
+    const user = await this.userRepo.findOne({
+      where: { email },
+      relations: ['role'],
+    });
     if (!user) throw new UnauthorizedException('Invalid credentials');
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) throw new UnauthorizedException('Invalid credentials');

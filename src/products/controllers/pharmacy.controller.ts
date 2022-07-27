@@ -11,7 +11,14 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiConsumes,
+  ApiBody,
+  ApiHeader,
+  ApiCookieAuth,
+} from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { PharmacysService } from '../services';
@@ -41,9 +48,8 @@ export class PharmacyController {
     return this.pharmaciesService.findOne(id);
   }
 
-  // @Roles(RoleEnum.ADMIN)
-  @Public()
-  @ApiOperation({ summary: 'Create a pharmacy, required admin role' })
+  @Roles(RoleEnum.MEDIC)
+  @ApiOperation({ summary: 'Create a pharmacy, required medic role' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {

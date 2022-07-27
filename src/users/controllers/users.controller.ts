@@ -23,23 +23,25 @@ import { UsersService } from '../services';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Roles(RoleEnum.ADMIN)
+  @Public()
+  // @Roles(RoleEnum.ADMIN)
   @ApiOperation({ summary: 'Find all users, required admin role' })
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Roles(RoleEnum.CUSTOMER)
+  @Public()
+  // @Roles(RoleEnum.CUSTOMER)
   @ApiOperation({ summary: 'Find a user by id' })
   @Get(':id')
   get(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
   }
 
-  @Roles(RoleEnum.ADMIN)
+  @Public()
   @ApiOperation({ summary: 'Create a user' })
-  @Post('create')
+  @Post('')
   create(@Body() payload: CreateUserDto) {
     return this.usersService.create(payload);
   }

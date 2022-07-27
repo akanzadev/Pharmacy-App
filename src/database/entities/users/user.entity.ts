@@ -10,6 +10,7 @@ import { Exclude } from 'class-transformer';
 
 import { DateAt } from '../../../common/entities';
 import { Role, Customer, Source } from '.';
+import { Pharmacy } from '../products';
 
 @Entity({ name: 'users' })
 export class User extends DateAt {
@@ -36,6 +37,11 @@ export class User extends DateAt {
   })
   @JoinColumn({ name: 'source_id' })
   source: Source;
+
+  @OneToOne(() => Pharmacy, (pharmacy) => pharmacy.user, {
+    nullable: true,
+  })
+  pharmacy: Pharmacy;
 
   @OneToOne(() => Customer, (customer) => customer.user, {
     nullable: true,

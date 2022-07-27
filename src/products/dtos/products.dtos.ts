@@ -73,11 +73,6 @@ export class CreateProductDto {
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
 
-export class CreateProductWithImageDto {
-  @IsString()
-  readonly product: string;
-}
-
 export class FilterProductDto {
   @IsOptional()
   @IsPositive()
