@@ -18,17 +18,35 @@ import {
   imports: [
     TypeOrmModule.forRootAsync({
       inject: [config.KEY],
-      useFactory: async ({ postgres }: ConfigType<typeof config>) => ({
-        type: 'postgres',
-        host: postgres.host,
-        port: postgres.port,
-        username: postgres.user,
-        password: postgres.password,
-        database: postgres.dbName,
-        synchronize: false,
-        logging: true,
-        autoLoadEntities: true,
-      }),
+      useFactory: async (configService: ConfigType<typeof config>) => {
+        const {
+          postgres: { dbName, host, password, port, user, url },
+          scope: { nodeEnv },
+        } = configService;
+        if (nodeEnv === 'production') {
+          return {
+            type: 'postgres',
+            url,
+            synchronize: false,
+            logging: false,
+            autoLoadEntities: true,
+            ssl: { rejectUnauthorized: false },
+          };
+        } else {
+          return {
+            type: 'postgres',
+            host,
+            port,
+            username: user,
+            password,
+            database: dbName,
+            synchronize: false,
+            logging: false,
+            autoLoadEntities: true,
+            ssl: false,
+          };
+        }
+      },
     }),
     TypeOrmModule.forFeature([
       Pharmacy,

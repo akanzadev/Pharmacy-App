@@ -2,12 +2,16 @@ import { registerAs } from '@nestjs/config';
 
 export default registerAs('config', () => {
   return {
+    scope: {
+      nodeEnv: process.env.NODE_ENV || 'development',
+    },
     postgres: {
       dbName: process.env.PG_DB,
       host: process.env.PG_HOST,
       password: process.env.PG_PASSWORD,
       port: parseInt(process.env.PG_PORT, 10),
       user: process.env.PG_USER,
+      url: process.env.DATABASE_URL,
     },
     jwt: {
       expiration: process.env.ACCESS_TOKEN_EXPIRATION,
