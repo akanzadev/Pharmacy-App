@@ -12,8 +12,8 @@ export const dataSource = (): DataSource => {
       ssl: { rejectUnauthorized: false },
     });
   } else {
-    console.log(join(__dirname, '/migrations/*{.ts,.js}'));
-    console.log(join(__dirname, '/entities/**/*{.ts,.js}'));
+    // console.log(join(__dirname, '/migrations/*{.ts,.js}'));
+    // console.log(join(__dirname, '/entities/**/*{.ts,.js}'));
     return new DataSource({
       type: 'postgres',
       host: 'localhost',
