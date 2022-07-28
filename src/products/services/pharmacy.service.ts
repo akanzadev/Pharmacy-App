@@ -94,8 +94,12 @@ export class PharmacysService {
   }
 
   private async validateUser(userId: number) {
-    const user = await this.usersRepo.findOneBy({ id: userId });
+    const user = await this.usersRepo.findOne({
+      where: { id: userId },
+      relations: ['pharmacy'],
+    });
     if (!user) throw new NotFoundException('User not found');
+    if (user.pharmacy) throw new NotFoundException('User already has pharmacy');
     return user;
   }
 }
