@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Product, Pharmacy } from './entities/products';
 import config from '../config';
+import { dataSource } from './data-source';
 import {
   Customer,
   Order,
@@ -12,6 +13,9 @@ import {
   Source,
   User,
 } from './entities/users';
+
+const datasourc = dataSource();
+console.log(datasourc);
 
 @Global()
 @Module({

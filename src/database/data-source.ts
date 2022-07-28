@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
+import { join } from 'path';
 
 export const dataSource = (): DataSource => {
   if (process.env.NODE_ENV === 'production') {
@@ -11,6 +12,8 @@ export const dataSource = (): DataSource => {
       ssl: { rejectUnauthorized: false },
     });
   } else {
+    console.log(join(__dirname, '/migrations/*{.ts,.js}'));
+    console.log(join(__dirname, '/entities/**/*{.ts,.js}'));
     return new DataSource({
       type: 'postgres',
       host: 'localhost',
@@ -18,8 +21,8 @@ export const dataSource = (): DataSource => {
       username: 'root',
       password: 'admin',
       database: 'my_db',
-      migrations: [__dirname + '/../**/migrations/*{.ts,.js}'],
-      entities: [__dirname + '/../**/entities/*{.ts,.js}'],
+      migrations: [join(__dirname, '/migrations/*{.ts,.js}')],
+      entities: [join(__dirname + '/entities/**/*{.ts,.js}')],
       synchronize: false,
       logging: false,
       ssl: false,
@@ -28,7 +31,7 @@ export const dataSource = (): DataSource => {
 };
 
 export const AppDataSource = dataSource();
-
+// npm run migrations:generate -- src/database/migrations/initDB
 /* export const AppDataSource = new DataSource({
   type: 'postgres',
   host: 'localhost',

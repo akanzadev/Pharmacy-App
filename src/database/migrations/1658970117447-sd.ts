@@ -1,7 +1,7 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class init21658953549226 implements MigrationInterface {
-    name = 'init21658953549226'
+export class sd1658970117447 implements MigrationInterface {
+    name = 'sd1658970117447'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "customers" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying(255) NOT NULL, "lastname" character varying(255) NOT NULL, "phone" character varying(255), CONSTRAINT "UQ_88acd889fbe17d0e16cc4bc9174" UNIQUE ("phone"), CONSTRAINT "PK_133ec679a801fab5e070f73d3ea" PRIMARY KEY ("id"))`);
@@ -12,7 +12,7 @@ export class init21658953549226 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "roles" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" "public"."roles_name_enum" NOT NULL DEFAULT 'customer', "description" character varying(255) NOT NULL, CONSTRAINT "UQ_6521db71370e3fecb07064ce930" UNIQUE ("description"), CONSTRAINT "PK_c1433d71a4838793a49dcad46ab" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "public"."source_name_enum" AS ENUM('email', 'facebook', 'google', 'instagram', 'microsoft', 'twitter')`);
         await queryRunner.query(`CREATE TABLE "source" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" "public"."source_name_enum" NOT NULL DEFAULT 'email', CONSTRAINT "UQ_e64619e22dc97d6525c86ef8af5" UNIQUE ("name"), CONSTRAINT "PK_018c433f8264b58c86363eaadde" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "pharmacy" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying(255) NOT NULL, "image" character varying(255) NOT NULL, "user_id" integer, CONSTRAINT "UQ_74af9faac46c4f8e0d0e99f0d94" UNIQUE ("name"), CONSTRAINT "REL_672832178b734bba48fe9438ed" UNIQUE ("user_id"), CONSTRAINT "PK_f6712b909f461cf4fe9926e0c5d" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "pharmacy" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying(254) NOT NULL, "image" character varying(255) NOT NULL, "user_id" integer, CONSTRAINT "UQ_74af9faac46c4f8e0d0e99f0d94" UNIQUE ("name"), CONSTRAINT "REL_672832178b734bba48fe9438ed" UNIQUE ("user_id"), CONSTRAINT "PK_f6712b909f461cf4fe9926e0c5d" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "products" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying(255) NOT NULL, "description" text NOT NULL, "price" double precision NOT NULL, "stock" integer NOT NULL, "image" character varying NOT NULL, "expirationDate" date NOT NULL, "pharmacy_id" integer, CONSTRAINT "UQ_4c9fb58de893725258746385e16" UNIQUE ("name"), CONSTRAINT "PK_0806c755e0aca124e67c0cf6d7d" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_4fbc36ad745962e5c11001e1a8" ON "products" ("price", "stock") `);
         await queryRunner.query(`ALTER TABLE "order_item" ADD CONSTRAINT "FK_904370c093ceea4369659a3c810" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
