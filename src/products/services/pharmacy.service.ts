@@ -9,12 +9,14 @@ import { Repository } from 'typeorm';
 import { Pharmacy } from '../../database/entities/products';
 import { CreatePharmacyDto, UpdatePharmacyDto } from '../dtos';
 import { ImagesService } from '../../images/services/images.service';
+import { User } from '../../database/entities/users/user.entity';
 
 @Injectable()
 export class PharmacysService {
   constructor(
     @InjectRepository(Pharmacy)
     private readonly pharmacysRepo: Repository<Pharmacy>,
+    @InjectRepository(User) private usersRepo: Repository<User>,
     private readonly imageService: ImagesService,
   ) {}
 
@@ -37,7 +39,8 @@ export class PharmacysService {
   async create(data: CreatePharmacyDto, files: Array<Express.Multer.File>) {
     if (files.length === 0) throw new BadRequestException('No image uploaded');
     await this.validateNameUnique(data.name);
-    const newPharmacy = this.pharmacysRepo.create(data);
+    const user = await this.validateUser(data.userId);
+    const newPharmacy = this.pharmacysRepo.create({ ...data, user });
     const { secure_url } = await this.imageService.uploadImage(
       data.name,
       files[0],
@@ -88,5 +91,11 @@ export class PharmacysService {
     if (PharmacyWithName) {
       throw new NotFoundException(`Pharmacy with name ${name} already exists`);
     }
+  }
+
+  private async validateUser(userId: number) {
+    const user = await this.usersRepo.findOneBy({ id: userId });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 }

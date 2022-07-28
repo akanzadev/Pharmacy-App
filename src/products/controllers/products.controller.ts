@@ -70,11 +70,9 @@ export class ProductsController {
   @Post('')
   @UseInterceptors(FilesInterceptor('image', 1, multerOptions))
   create(
-    @Req() request: Request,
     @Body() data: CreateProductDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    console.log(request['user']);
     return this.productsService.create(data, files);
   }
 

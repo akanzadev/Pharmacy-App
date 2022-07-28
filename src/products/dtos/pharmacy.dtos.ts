@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  IsOptional,
+} from 'class-validator';
 import { PartialType, ApiProperty } from '@nestjs/swagger';
 
 export class CreatePharmacyDto {
@@ -10,6 +16,14 @@ export class CreatePharmacyDto {
   })
   readonly name: string;
 
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  @ApiProperty({
+    description: 'The pharmacy of Product',
+    default: Math.floor(Math.random() * 100),
+  })
+  readonly userId: number;
   /*
   @IsUrl()
   @IsNotEmpty()

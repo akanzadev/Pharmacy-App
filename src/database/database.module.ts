@@ -14,8 +14,8 @@ import {
   User,
 } from './entities/users';
 
-const datasourc = dataSource();
-console.log(datasourc);
+/* const datasourc = dataSource();
+console.log(datasourc); */
 
 @Global()
 @Module({

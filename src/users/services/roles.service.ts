@@ -28,6 +28,7 @@ export class RolesService {
 
   async create(data: CreateRoleDto) {
     await this.validateNameUnique(data.name);
+    await this.validateDescriptionUnique(data.description);
     const newRole = this.roleRepo.create(data);
     return this.roleRepo.save(newRole);
   }

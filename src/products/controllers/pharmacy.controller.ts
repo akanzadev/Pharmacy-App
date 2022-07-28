@@ -7,25 +7,20 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Req,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiConsumes,
-  ApiBody,
-  ApiHeader,
-  ApiCookieAuth,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
 
 import { PharmacysService } from '../services';
 import { CreatePharmacyDto, UpdatePharmacyDto } from '../dtos';
 import { JwtAuthGuard, RolesGuard } from '../../auth/guards';
 import { Public, Roles } from '../../auth/decorators';
-import { RoleEnum } from '../../auth/models';
+import { PayloadToken, RoleEnum } from '../../auth/models';
 import { multerOptions } from '../../common/helpers/multer.config';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -48,7 +43,7 @@ export class PharmacyController {
     return this.pharmaciesService.findOne(id);
   }
 
-  @Roles(RoleEnum.MEDIC)
+  @Roles(RoleEnum.CUSTOMER)
   @ApiOperation({ summary: 'Create a pharmacy, required medic role' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -66,10 +61,12 @@ export class PharmacyController {
   @Post('')
   @UseInterceptors(FilesInterceptor('image', 1, multerOptions))
   create(
+    @Req() request: Request,
     @Body() payload: CreatePharmacyDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    return this.pharmaciesService.create(payload, files);
+    const { sub } = request['user'] as PayloadToken;
+    return this.pharmaciesService.create({ ...payload, userId: sub }, files);
   }
 
   // @Roles(RoleEnum.ADMIN)
