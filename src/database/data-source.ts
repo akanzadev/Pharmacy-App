@@ -3,12 +3,14 @@ import { DataSource } from 'typeorm';
 import { join } from 'path';
 
 export const dataSource = (): DataSource => {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV == 'production') {
     return new DataSource({
       type: 'postgres',
       url: process.env.DATABASE_URL,
       synchronize: false,
       logging: false,
+      migrations: [join(__dirname, '/migrations/*{.ts,.js}')],
+      entities: [join(__dirname + '/entities/**/*{.ts,.js}')],
       ssl: { rejectUnauthorized: false },
     });
   } else {
