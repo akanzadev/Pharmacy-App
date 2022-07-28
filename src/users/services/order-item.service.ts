@@ -25,7 +25,8 @@ export class OrderItemService {
   }
 
   async findOne(id: number) {
-    const orderItem = await this.OrderItemRepo.findOne(id, {
+    const orderItem = await this.OrderItemRepo.findOne({
+      where: { id },
       relations: ['order', 'product'],
     });
     if (!orderItem) throw new NotFoundException(`Order item #${id} not found`);
@@ -36,7 +37,14 @@ export class OrderItemService {
     const order = await this.validateOrder(orderId);
     const product = await this.validateProduct(productId);
     const orderItem = await this.OrderItemRepo.findOne({
-      where: { order: orderId, product: productId },
+      where: {
+        order: {
+          id: orderId,
+        },
+        product: {
+          id: productId,
+        },
+      },
       relations: ['order', 'product'],
     });
     if (orderItem) {
@@ -61,20 +69,21 @@ export class OrderItemService {
   }
 
   private async validateOrder(id: number) {
-    const order = await this.orderRepo.findOne(id, {
+    const order = await this.orderRepo.findOne({
+      where: { id },
       relations: ['items'],
     });
     if (!order) throw new NotFoundException(`Order #${id} not found`);
     return order;
   }
   private async validateProduct(id: number) {
-    const product = await this.productRepo.findOne(id);
+    const product = await this.productRepo.findOneBy({ id });
     if (!product) throw new NotFoundException(`Product #${id} not found`);
     return product;
   }
 
   private async validateNotFound(id: number) {
-    const item = await this.OrderItemRepo.findOne(id);
+    const item = await this.OrderItemRepo.findOneBy({ id });
     if (!item) throw new NotFoundException(`Order item #${id} not found`);
     return item;
   }

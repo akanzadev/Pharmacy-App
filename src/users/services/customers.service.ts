@@ -24,7 +24,7 @@ export class CustomersService {
   }
 
   async findOne(id: number) {
-    const customer = await this.customerRepo.findOne(id);
+    const customer = await this.customerRepo.findOneBy({ id });
     if (!customer) throw new NotFoundException(`Customer #${id} not found`);
     return customer;
   }
@@ -51,7 +51,7 @@ export class CustomersService {
   }
 
   private async validateNotFound(id: number) {
-    const customer = await this.customerRepo.findOne(id);
+    const customer = await this.customerRepo.findOneBy({ id });
     if (!customer) throw new NotFoundException(`Customer #${id} not found`);
     return customer;
   }

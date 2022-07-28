@@ -14,7 +14,8 @@ export class OrdersService {
   ) {}
 
   async ordersByCustomer(userId: number) {
-    const user = await this.userRepo.findOne(userId, {
+    const user = await this.userRepo.findOne({
+      where: { id: userId },
       relations: ['customer'],
     });
     if (!user) throw new NotFoundException(`User #${userId} not found`);
@@ -36,7 +37,8 @@ export class OrdersService {
   }
 
   async findOne(id: number) {
-    const order = await this.orderRepo.findOne(id, {
+    const order = await this.orderRepo.findOne({
+      where: { id },
       relations: ['items', 'items.product', 'customer'],
     });
     if (!order) throw new NotFoundException(`Order #${id} not found`);
@@ -68,13 +70,13 @@ export class OrdersService {
   }
 
   private async validateNotFound(id: number) {
-    const order = await this.orderRepo.findOne(id);
+    const order = await this.orderRepo.findOneBy({ id });
     if (!order) throw new NotFoundException(`Order #${id} not found`);
     return order;
   }
 
   private async validateCustomer(id: number) {
-    const customer = await this.customerRepo.findOne(id);
+    const customer = await this.customerRepo.findOneBy({ id });
     if (!customer) throw new NotFoundException(`Customer #${id} not found`);
     return customer;
   }

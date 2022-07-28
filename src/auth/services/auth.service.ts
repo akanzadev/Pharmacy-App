@@ -50,7 +50,8 @@ export class AuthService {
   }
 
   async validateRoleInUser(user: PayloadToken, roles: RoleEnum[]) {
-    const userRole = await this.userRepo.findOne(user.sub, {
+    const userRole = await this.userRepo.findOne({
+      where: { id: user.sub },
       relations: ['role'],
     });
     if (!userRole) throw new UnauthorizedException('Invalid credentials');

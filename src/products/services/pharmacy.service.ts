@@ -26,7 +26,8 @@ export class PharmacysService {
   }
 
   async findOne(id: number) {
-    const Pharmacy = await this.pharmacysRepo.findOne(id, {
+    const Pharmacy = await this.pharmacysRepo.findOne({
+      where: { id },
       relations: ['products'],
     });
     if (!Pharmacy) throw new NotFoundException(`Pharmacy #${id} not found`);
@@ -73,7 +74,9 @@ export class PharmacysService {
   }
 
   private async validateNotFound(id: number) {
-    const Pharmacy = await this.pharmacysRepo.findOne(id);
+    const Pharmacy = await this.pharmacysRepo.findOne({
+      where: { id },
+    });
     if (!Pharmacy) throw new NotFoundException(`Pharmacy #${id} not found`);
     return Pharmacy;
   }

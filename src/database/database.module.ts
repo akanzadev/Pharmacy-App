@@ -3,7 +3,7 @@ import { Module, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Product, Pharmacy } from './entities/products';
-import config from 'src/config';
+import config from '../config';
 import {
   Customer,
   Order,

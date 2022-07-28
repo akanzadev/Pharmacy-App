@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Between, FindConditions, Repository } from 'typeorm';
+import { Between, FindOptionsWhere, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import {
@@ -34,7 +34,7 @@ export class ProductsService {
       }
       return products;
     }
-    const where: FindConditions<Product> = {};
+    const where: FindOptionsWhere<Product> = {};
     const { limit, offset, maxPrice, minPrice } = params;
     if (minPrice && maxPrice) where.price = Between(minPrice, maxPrice);
     const products = await this.productRepo.find({
@@ -50,7 +50,8 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    const product = await this.productRepo.findOne(id, {
+    const product = await this.productRepo.findOne({
+      where: { id },
       relations: ['pharmacy'],
     });
     if (!product) throw new NotFoundException(`Product #${id} not found`);
@@ -102,7 +103,8 @@ export class ProductsService {
   }
 
   private async validateNotFound(id: number) {
-    const product = await this.productRepo.findOne(id, {
+    const product = await this.productRepo.findOne({
+      where: { id },
       relations: ['pharmacy'],
     });
     if (!product) throw new NotFoundException(`Product #${id} not found`);
@@ -114,8 +116,10 @@ export class ProductsService {
     if (product) throw new BadRequestException('Product already exists');
   }
 
-  private async validatePharmacy(PharmacyId: number) {
-    const Pharmacy = await this.PharmacyRepo.findOne(PharmacyId);
+  private async validatePharmacy(pharmacyId: number) {
+    const Pharmacy = await this.PharmacyRepo.findOne({
+      where: { id: pharmacyId },
+    });
     if (!Pharmacy) throw new NotFoundException('Pharmacy not found');
     return Pharmacy;
   }

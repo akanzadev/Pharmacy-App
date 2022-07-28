@@ -10,7 +10,7 @@ import { AuthService } from '../services/auth.service';
 import { CreateUserDto } from '../../users/dtos';
 import { SourceEnum, RoleEnum } from '../models';
 import { User, Role, Source, Customer } from '../../database/entities/users';
-import config from 'src/config';
+import config from '../../config';
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
@@ -69,7 +69,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
       where: { name: SourceEnum.GOOGLE },
     });
     const rta = await this.userRepo.save(newUser);
-    const customer = await this.customerRepo.findOne(rta.customer.id);
+    const customer = await this.customerRepo.findOneBy({ id: rta.customer.id });
     customer.user = rta;
     await this.customerRepo.save(customer);
     return rta;

@@ -4,7 +4,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { Request as RequestType } from 'express';
 import { ConfigType } from '@nestjs/config';
 
-import config from 'src/config';
+import config from '../../config';
 import { PayloadToken } from '../models/token.model';
 
 @Injectable()

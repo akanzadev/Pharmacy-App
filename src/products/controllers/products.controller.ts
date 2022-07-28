@@ -19,7 +19,7 @@ import { Request } from 'express';
 import { CreateProductDto, UpdateProductDto, FilterProductDto } from '../dtos';
 import { JwtAuthGuard, RolesGuard } from '../../auth/guards';
 import { ProductsService } from './../services';
-import { Public, Roles } from 'src/auth/decorators';
+import { Public, Roles } from '../../auth/decorators';
 import { RoleEnum } from '../../auth/models';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from '../../common/helpers/multer.config';

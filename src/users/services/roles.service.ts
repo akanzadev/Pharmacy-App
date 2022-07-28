@@ -21,7 +21,7 @@ export class RolesService {
   }
 
   async findOne(id: number) {
-    const roles = await this.roleRepo.findOne(id);
+    const roles = await this.roleRepo.findOneBy({ id });
     if (!roles) throw new NotFoundException(`Roles #${id} not found`);
     return roles;
   }
@@ -49,7 +49,7 @@ export class RolesService {
   }
 
   private async validateNotFound(id: number) {
-    const role = await this.roleRepo.findOne(id);
+    const role = await this.roleRepo.findOneBy({ id });
     if (!role) throw new NotFoundException(`Roles #${id} not found`);
     return role;
   }

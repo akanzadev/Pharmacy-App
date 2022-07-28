@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-import { RoleEnum, SourceEnum } from 'src/auth/models';
+import { RoleEnum, SourceEnum } from '../../auth/models';
 import { User, Customer, Role, Source } from '../../database/entities/users';
 import {
   CreateUserDto,
@@ -33,7 +33,8 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    const user = await this.userRepo.findOne(id, {
+    const user = await this.userRepo.findOne({
+      where: { id },
       relations: ['customer', 'role'],
     });
     if (!user) throw new NotFoundException(`User #${id} not found`);
@@ -67,7 +68,9 @@ export class UsersService {
       where: { name: SourceEnum.EMAIL },
     });
     const rta = await this.userRepo.save(newUser);
-    const customer = await this.customerRepo.findOne(rta.customer.id);
+    const customer = await this.customerRepo.findOne({
+      where: { id: rta.customer.id },
+    });
     customer.user = rta;
     await this.customerRepo.save(customer);
     return rta;
@@ -97,7 +100,9 @@ export class UsersService {
 
   async remove(id: number) {
     const user = await this.validateNotFound(id);
-    const customer = await this.customerRepo.findOne(user.customer.id);
+    const customer = await this.customerRepo.findOne({
+      where: { id: user.customer.id },
+    });
     await this.userRepo.remove(user);
     if (customer) await this.customerRepo.remove(customer);
     return {
@@ -106,7 +111,8 @@ export class UsersService {
   }
 
   private async validateNotFound(id: number) {
-    const user = await this.userRepo.findOne(id, {
+    const user = await this.userRepo.findOne({
+      where: { id },
       relations: ['customer', 'role'],
     });
     if (!user) throw new NotFoundException(`User #${id} not found`);
@@ -119,21 +125,25 @@ export class UsersService {
   }
 
   private async validateCustomer(customerId: number) {
-    const customer = await this.customerRepo.findOne(customerId);
+    const customer = await this.customerRepo.findOneBy({ id: customerId });
     if (!customer) throw new NotFoundException('Customer not found');
     const user = await this.userRepo.findOne({
-      where: { customer: customer.id },
+      where: {
+        customer: {
+          id: customerId,
+        },
+      },
     });
     if (user) throw new BadRequestException('Customer already registered');
     return customer;
   }
   private async validateRole(roleId: number) {
-    const role = await this.roleRepo.findOne(roleId);
+    const role = await this.roleRepo.findOneBy({ id: roleId });
     if (!role) throw new NotFoundException('Role not found');
     return role;
   }
   private async validateSource(sourceId: number) {
-    const source = await this.sourceRepo.findOne(sourceId);
+    const source = await this.sourceRepo.findOneBy({ id: sourceId });
     if (!source) throw new NotFoundException('Source not found');
     return source;
   }

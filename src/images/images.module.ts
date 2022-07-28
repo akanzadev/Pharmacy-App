@@ -3,7 +3,7 @@ import { ConfigType } from '@nestjs/config';
 import { v2 as cloudinary } from 'cloudinary';
 
 import { ImagesService } from './services/images.service';
-import config from 'src/config';
+import config from '../config';
 
 @Module({
   providers: [
