@@ -100,6 +100,7 @@ export class PharmacysService {
     });
     if (!user) throw new NotFoundException('User not found');
     if (user.pharmacy) throw new NotFoundException('User already has pharmacy');
+    delete user.pharmacy;
     return user;
   }
 }
