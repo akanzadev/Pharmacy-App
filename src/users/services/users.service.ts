@@ -62,7 +62,7 @@ export class UsersService {
       }),
     );
     newUser.role = await this.roleRepo.findOne({
-      where: { name: RoleEnum.CUSTOMER },
+      where: { name: RoleEnum.MEDIC },
     });
     newUser.source = await this.sourceRepo.findOne({
       where: { name: SourceEnum.EMAIL },
