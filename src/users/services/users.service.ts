@@ -4,11 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { RoleEnum, SourceEnum } from '../../auth/models';
 import { User, Customer, Role, Source } from '../../database/entities/users';
+import { RefreshToken } from './../../auth/models/token.model';
 import {
   CreateUserDto,
   CreateUserPrivateDto,
@@ -22,6 +24,7 @@ export class UsersService {
     @InjectRepository(Customer) private customerRepo: Repository<Customer>,
     @InjectRepository(Role) private roleRepo: Repository<Role>,
     @InjectRepository(Source) private sourceRepo: Repository<Source>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async findAll() {
@@ -64,6 +67,8 @@ export class UsersService {
     newUser.role = await this.roleRepo.findOne({
       where: { name: RoleEnum.MEDIC },
     });
+    const payload: RefreshToken = { email: data.email };
+    newUser.refreshToken = this.jwtService.sign(payload);
     newUser.source = await this.sourceRepo.findOne({
       where: { name: SourceEnum.EMAIL },
     });

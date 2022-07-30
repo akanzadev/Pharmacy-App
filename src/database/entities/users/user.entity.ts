@@ -24,6 +24,10 @@ export class User extends DateAt {
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
+  @Exclude()
+  @Column({ type: 'varchar', length: 255, unique: true })
+  refreshToken: string;
+
   @ManyToOne(() => Role, (role) => role.users, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',

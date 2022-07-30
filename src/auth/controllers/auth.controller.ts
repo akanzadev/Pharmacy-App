@@ -13,6 +13,8 @@ import { ApiTags, ApiBody } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { LoginAuthDto } from '../dtos/auth.dto';
 import { User } from '../../database/entities/users';
+import { RefreshAuthGuard } from '../guards/refresh-auth.guard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -23,6 +25,12 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @ApiBody({ type: LoginAuthDto })
   login(@Req() req: Request) {
+    return this.authService.generateJwtToken(req.user as User);
+  }
+
+  @Post('refreshToken')
+  @UseGuards(JwtAuthGuard, RefreshAuthGuard)
+  refreshToken(@Req() req: Request) {
     return this.authService.generateJwtToken(req.user as User);
   }
 
