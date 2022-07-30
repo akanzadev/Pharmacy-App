@@ -14,8 +14,6 @@ export const dataSource = (): DataSource => {
       ssl: { rejectUnauthorized: false },
     });
   } else {
-    // console.log(join(__dirname, '/migrations/*{.ts,.js}'));
-    // console.log(join(__dirname, '/entities/**/*{.ts,.js}'));
     return new DataSource({
       type: 'postgres',
       host: 'localhost',
@@ -34,15 +32,3 @@ export const dataSource = (): DataSource => {
 
 export const AppDataSource = dataSource();
 // npm run migrations:generate -- src/database/migrations/initDB
-/* export const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'test',
-  password: 'test',
-  database: 'test',
-  synchronize: true,
-  logging: false,
-  subscribers: [],
-});
- */

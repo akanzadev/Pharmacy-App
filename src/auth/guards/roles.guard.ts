@@ -16,12 +16,9 @@ export class RolesGuard implements CanActivate {
       ROLES_KEY,
       context.getHandler(),
     );
-    if (roles.length === 0) return true;
-    // DATA GUARD
+    if (!roles) return true;
     const request = context.switchToHttp().getRequest();
-    console.log(request.user, request.refreshToken);
     const user = request.user as PayloadToken;
-    // DATA TOKEN
     return this.authService.validateRoleInUser(user, roles);
   }
 }

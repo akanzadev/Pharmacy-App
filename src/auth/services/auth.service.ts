@@ -34,7 +34,10 @@ export class AuthService {
       where: {
         id: data.sub,
         email: data.email,
-        //refreshToken: data.refreshToken,
+        refreshToken: data.refreshToken,
+        role: {
+          name: data.role as RoleEnum,
+        },
       },
       relations: ['role'],
     });
