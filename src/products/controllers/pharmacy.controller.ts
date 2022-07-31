@@ -43,7 +43,7 @@ export class PharmacyController {
     return this.pharmaciesService.findOne(id);
   }
 
-  @Roles(RoleEnum.CUSTOMER)
+  @Roles(RoleEnum.MEDIC)
   @ApiOperation({ summary: 'Create a pharmacy, required medic role' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
