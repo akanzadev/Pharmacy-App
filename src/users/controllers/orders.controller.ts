@@ -23,28 +23,28 @@ import { UpdateOrderDto, CreateOrderDto } from '../dtos';
 export class OrdersController {
   constructor(private orderService: OrdersService) {}
 
-  @Roles(RoleEnum.CUSTOMER)
+  @Roles(RoleEnum.MEDIC)
   @ApiOperation({ summary: 'Get all orders, required login' })
   @Get()
   findAll() {
     return this.orderService.findAll();
   }
 
-  @Roles(RoleEnum.CUSTOMER)
+  @Roles(RoleEnum.MEDIC)
   @ApiOperation({ summary: 'Get an order by id, required login' })
   @Get(':id')
   get(@Param('id', ParseIntPipe) id: number) {
     return this.orderService.findOne(id);
   }
 
-  @Roles(RoleEnum.CUSTOMER)
+  @Roles(RoleEnum.MEDIC)
   @ApiOperation({ summary: 'Create an order, required login' })
   @Post()
   create(@Body() payload: CreateOrderDto) {
     return this.orderService.create(payload);
   }
 
-  @Roles(RoleEnum.CUSTOMER)
+  @Roles(RoleEnum.MEDIC)
   @ApiOperation({ summary: 'Update an order, required login' })
   @Put(':id')
   update(
@@ -54,7 +54,7 @@ export class OrdersController {
     return this.orderService.update(id, payload);
   }
 
-  @Roles(RoleEnum.CUSTOMER)
+  @Roles(RoleEnum.MEDIC)
   @ApiOperation({ summary: 'Delete an order, required login' })
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
