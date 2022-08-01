@@ -29,7 +29,7 @@ export class OrdersService {
 
   async findAll() {
     const orders = await this.orderRepo.find({
-      select: ['id', 'customer'],
+      select: ['id', 'customer','items', 'items.product'],
       relations: ['customer'],
     });
     if (orders.length === 0) throw new NotFoundException('No orders found');
