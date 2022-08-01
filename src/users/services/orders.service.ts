@@ -29,8 +29,8 @@ export class OrdersService {
 
   async findAll() {
     const orders = await this.orderRepo.find({
-      select: ['id', 'customer','items', 'items.product'],
-      relations: ['customer'],
+      select: ['id', 'customer', 'items'],
+      relations: ['customer','items', 'items.product'],
     });
     if (orders.length === 0) throw new NotFoundException('No orders found');
     return orders;
