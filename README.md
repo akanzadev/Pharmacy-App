@@ -1,11 +1,11 @@
-# Ecommerce con NestJs y TypeORM
+# Medic App
 
 Api de ecommerce con NestJs y TypeORM
 
 Para instalar las dependencias:
 
 ```nodejs
-npm install 
+npm install
 ```
 
 Para levantar los contenedores:
